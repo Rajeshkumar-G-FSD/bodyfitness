@@ -13,3 +13,8 @@ router.post("/login", userController.loginUser);
 router.put("/:userId/profile", userController.updateUserProfile);
 
 module.exports = router;
+
+// User Dashboard
+router.get("/:userId/dashboard", userController.getUserDashboard);
+
+module.exports = router;

@@ -37,7 +37,6 @@ exports.cancelBooking = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
 //const Booking = require("../models/Booking");
 
 // Book a class

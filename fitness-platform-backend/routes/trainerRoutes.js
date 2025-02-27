@@ -3,13 +3,22 @@ const trainerController = require("../controllers/trainerController");
 
 const router = express.Router();
 
-// Get all trainers
-router.get("/", trainerController.getTrainers);
+// Fetch trainer profile
+router.get("/:trainerId", trainerController.getTrainerProfile);
 
-// Create a new trainer
-router.post("/", trainerController.createTrainer);
+// Fetch trainer reviews
+router.get("/:trainerId/reviews", trainerController.getTrainerReviews);
+
+// Submit trainer review
+router.post("/:trainerId/reviews", trainerController.submitTrainerReview);
+
+// Update trainer profile
+router.put("/:trainerId", trainerController.updateTrainerProfile);
 
 // Update trainer availability
 router.put("/:trainerId/availability", trainerController.updateTrainerAvailability);
+
+// Get all trainers
+router.get("/", trainerController.getTrainers);
 
 module.exports = router;

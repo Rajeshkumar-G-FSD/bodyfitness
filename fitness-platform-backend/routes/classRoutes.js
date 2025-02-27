@@ -9,4 +9,7 @@ router.get("/", classController.getClasses);
 // Book a class
 router.post("/", classController.bookClass);
 
+router.post("/", classController.createClass);
+
 module.exports = router;
+
