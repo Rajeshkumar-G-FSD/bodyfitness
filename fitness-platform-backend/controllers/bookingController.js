@@ -1,5 +1,4 @@
 const Booking = require("../models/Booking");
-
 // Fetch user bookings
 exports.getUserBookings = async (req, res) => {
   try {

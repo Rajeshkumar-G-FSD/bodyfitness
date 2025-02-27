@@ -1,5 +1,4 @@
 const Booking = require("../models/Booking");
-
 // Fetch user bookings
 exports.getUserBookings = async (req, res) => {
   try {
@@ -7,7 +6,7 @@ exports.getUserBookings = async (req, res) => {
     const bookings = await Booking.find({ userId }).populate("classId");
     res.status(200).json(bookings);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -37,7 +36,6 @@ exports.cancelBooking = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
 // Fetch trainer bookings
 exports.getTrainerBookings = async (req, res) => {
   try {

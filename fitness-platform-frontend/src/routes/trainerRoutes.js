@@ -18,4 +18,7 @@ router.put("/:trainerId", trainerController.updateTrainerProfile);
 // Get all trainers
 router.get("/", trainerController.getTrainers);
 
+
+router.get("/:trainerId", trainerController.getTrainerProfile);
+
 module.exports = router;

@@ -26,15 +26,22 @@ exports.createTrainer = async (req, res) => {
 exports.getTrainerProfile = async (req, res) => {
   try {
     const { trainerId } = req.params;
+
+    // Fetch trainer details
     const trainer = await Trainer.findById(trainerId);
     if (!trainer) {
       return res.status(404).json({ message: "Trainer not found." });
     }
-    res.status(200).json(trainer);
+
+    // Fetch classes taught by the trainer
+    const classes = await Class.find({ trainer: trainerId });
+
+    res.status(200).json({ trainer, classes });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Fetch trainer reviews
 exports.getTrainerReviews = async (req, res) => {

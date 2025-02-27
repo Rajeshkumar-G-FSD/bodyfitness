@@ -21,4 +21,6 @@ router.put("/:trainerId/availability", trainerController.updateTrainerAvailabili
 // Get all trainers
 router.get("/", trainerController.getTrainers);
 
+router.get("/:trainerId", trainerController.getTrainerProfile);
+
 module.exports = router;

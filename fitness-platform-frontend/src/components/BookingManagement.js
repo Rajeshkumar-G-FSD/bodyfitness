@@ -5,21 +5,27 @@ const BookingManagement = ({ userId }) => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    fetchUserBookings(userId)
-      .then((response) => setBookings(response.data))
-      .catch((error) => console.error(error));
+    const fetchBookings = async () => {
+      try {
+        const response = await fetchUserBookings(userId);
+        setBookings(response.data);
+      } catch (error) {
+        console.error("Failed to fetch bookings:", error);
+      }
+    };
+
+    fetchBookings();
   }, [userId]);
 
   const handleReschedule = async (bookingId, newDate) => {
     try {
       const response = await rescheduleBooking(bookingId, newDate);
-      alert("Booking rescheduled successfully!");
       setBookings((prev) =>
         prev.map((booking) =>
           booking._id === bookingId ? { ...booking, date: newDate } : booking
         )
       );
-      console.log(response.data);
+      alert("Booking rescheduled successfully!");
     } catch (error) {
       console.error("Failed to reschedule booking:", error);
     }
@@ -27,10 +33,9 @@ const BookingManagement = ({ userId }) => {
 
   const handleCancel = async (bookingId) => {
     try {
-      const response = await cancelBooking(bookingId);
-      alert("Booking canceled successfully!");
+      await cancelBooking(bookingId);
       setBookings((prev) => prev.filter((booking) => booking._id !== bookingId));
-      console.log(response.data);
+      alert("Booking canceled successfully!");
     } catch (error) {
       console.error("Failed to cancel booking:", error);
     }
@@ -42,7 +47,7 @@ const BookingManagement = ({ userId }) => {
       {bookings.length > 0 ? (
         bookings.map((booking) => (
           <div key={booking._id} className="border p-4 rounded-lg mb-4">
-            <h3 className="text-xl font-semibold">{booking.className}</h3>
+            <h3 className="text-xl font-semibold">{booking.classId.name}</h3>
             <p className="text-gray-600">{booking.date} at {booking.time}</p>
             <div className="mt-2">
               <button

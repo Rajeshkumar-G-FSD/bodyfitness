@@ -14,4 +14,10 @@ router.put("/:bookingId/reschedule", bookingController.rescheduleBooking);
 // Cancel booking
 router.delete("/:bookingId", bookingController.cancelBooking);
 
+
+
+//router.get("/trainers/:trainerId/bookings", bookingController.getTrainerBookings);
 module.exports = router;
+
+
+

@@ -1,16 +1,27 @@
 const Trainer = require("../models/Trainer");
 const Review = require("../models/Review");
 
+
 // Fetch trainer profile
 exports.getTrainerProfile = async (req, res) => {
   try {
     const { trainerId } = req.params;
+
+    // Fetch trainer details
     const trainer = await Trainer.findById(trainerId);
-    res.status(200).json(trainer);
+    if (!trainer) {
+      return res.status(404).json({ message: "Trainer not found." });
+    }
+
+    // Fetch classes taught by the trainer
+    const classes = await Class.find({ trainer: trainerId });
+
+    res.status(200).json({ trainer, classes });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
+
 
 // Fetch trainer reviews
 exports.getTrainerReviews = async (req, res) => {
