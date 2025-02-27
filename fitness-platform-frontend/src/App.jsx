@@ -11,6 +11,7 @@ import TrainerFeedback from "./pages/TrainerFeedback";
 import RecommendationsPage from "./pages/RecommendationsPage";
 import UserBookingsPage from "./pages/UserBookingsPage";
 import TrainerBookingsPage from "./pages/TrainerBookingsPage";
+import TrainerProfile from "./components/TrainerProfile";
 
 function App() {
   return (
@@ -18,11 +19,13 @@ function App() {
       <Navbar />
       <div className="container mx-auto p-4">
         <Routes>
+       
           {/* Home Page */}
           <Route path="/" element={<Home />} />
 
           {/* Trainers Page */}
           <Route path="/trainers" element={<Trainers />} />
+          <Route path="/trainers/:trainerId" element={<TrainerProfile />} />
 
           {/* Classes Page */}
           <Route path="/classes" element={<Classes />} />

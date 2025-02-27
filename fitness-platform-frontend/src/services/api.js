@@ -5,6 +5,7 @@ const API = axios.create({
 });
 
 // Trainer API calls
+
 export const fetchTrainers = () => API.get("/trainers");
 export const createTrainer = (trainerData) => API.post("/trainers", trainerData);
 export const updateTrainerAvailability = (trainerId, availability) =>
@@ -12,7 +13,9 @@ export const updateTrainerAvailability = (trainerId, availability) =>
 
 // Class API calls
 export const fetchClasses = (filters) => API.get("/classes", { params: filters });
-export const bookClass = (classData) => API.post("/bookings", classData);
+
+// Book a class
+export const bookClass = (bookingData) => API.post("/bookings", bookingData);
 
 // Feedback API calls
 export const submitFeedback = (feedbackData) => API.post("/feedback", feedbackData);

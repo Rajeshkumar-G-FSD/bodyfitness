@@ -13,3 +13,5 @@ router.get("/:trainerId/reviews", trainerController.getTrainerReviews);
 router.post("/:trainerId/reviews", trainerController.submitTrainerReview);
 
 module.exports = router;
+
+
