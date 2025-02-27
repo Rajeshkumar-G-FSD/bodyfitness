@@ -33,7 +33,7 @@ export const fetchClassRecommendations = (userId) =>
   API.get(`/users/${userId}/recommendations`);
 
 // User API calls
-export const registerUser = (userData) => API.post("/users/register", userData);
+//export const registerUser = (userData) => API.post("/users/register", userData);
 export const loginUser = (credentials) => API.post("/users/login", credentials);
 export const updateUserProfile = (userId, profileData) =>
   API.put(`/users/${userId}/profile`, profileData);
@@ -47,3 +47,14 @@ export const submitTrainerReview = (trainerId, reviewData) =>
 
 export const updateTrainerProfile = (trainerId, updateData) =>
   API.put(`/trainers/${trainerId}`, updateData);
+
+
+// Register a new user
+export const registerUser = async (userData) => {
+  try {
+    const response = await API.post("/auth/register", userData);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};

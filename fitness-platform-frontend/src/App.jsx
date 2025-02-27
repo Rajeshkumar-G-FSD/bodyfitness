@@ -11,7 +11,9 @@ import TrainerFeedback from "./pages/TrainerFeedback";
 import UserBookingsPage from "./pages/UserBookingsPage";
 import TrainerBookingsPage from "./pages/TrainerBookingsPage";
 import TrainerProfile from "./components/TrainerProfile";
-import UserDashboard from "./pages/UserDashboard"; // Ensure this matches the file name
+import UserDashboard from "./pages/UserDashboard";
+import Login from "./components/Login"; // Import the Login component
+import Register from "./components/Register"; // Import the Register component
 
 function App() {
   return (
@@ -49,6 +51,12 @@ function App() {
 
           {/* User Dashboard Page */}
           <Route path="/dashboard" element={<UserDashboard userId="user-id-here" />} />
+
+          {/* Login Page */}
+          <Route path="/login" element={<Login />} />
+
+          {/* Register Page */}
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
     </Router>

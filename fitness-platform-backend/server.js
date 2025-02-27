@@ -2,6 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 dotenv.config();
 
@@ -18,6 +20,11 @@ app.use(express.json());
 connectDB();
 
 // Routes
+
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+
 app.use("/api/trainers", require("./routes/trainerRoutes"));
 app.use("/api/classes", require("./routes/classRoutes"));
 app.use("/api/bookings", require("./routes/bookingRoutes")); // Add this line

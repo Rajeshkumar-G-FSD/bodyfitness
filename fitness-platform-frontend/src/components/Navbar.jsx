@@ -49,6 +49,14 @@ const Navbar = () => {
               Trainer Feedback
             </Link>
           </li>
+          <li>
+            <Link
+              to="/login"
+              className="text-white hover:text-gray-200 transition-colors duration-300"
+            >
+              Login
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>

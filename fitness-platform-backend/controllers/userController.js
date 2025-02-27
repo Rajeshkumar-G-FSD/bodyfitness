@@ -3,6 +3,7 @@ const Booking = require("../models/Booking");
 const Class = require("../models/Class");
 
 
+
 // Register a new user
 exports.registerUser = async (req, res) => {
   try {
@@ -80,6 +81,33 @@ exports.getUserDashboard = async (req, res) => {
       bookingHistory,
       recommendations,
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.userId).select("-password");
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+// Update user profile
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, fitnessGoals, preferences } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { name, fitnessGoals, preferences },
+      { new: true }
+    ).select("-password");
+
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
