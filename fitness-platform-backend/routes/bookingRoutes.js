@@ -3,6 +3,8 @@ const bookingController = require("../controllers/bookingController");
 
 const router = express.Router();
 
+router.post("/", bookingController.bookClass);
+
 // Fetch user bookings
 router.get("/users/:userId/bookings", bookingController.getUserBookings);
 

@@ -12,6 +12,10 @@ router.get("/:trainerId/reviews", trainerController.getTrainerReviews);
 // Submit trainer review
 router.post("/:trainerId/reviews", trainerController.submitTrainerReview);
 
+// Update trainer profile
+router.put("/:trainerId", trainerController.updateTrainerProfile);
+
+// Get all trainers
+router.get("/", trainerController.getTrainers);
+
 module.exports = router;
-
-

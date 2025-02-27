@@ -44,3 +44,6 @@ export const fetchTrainerReviews = (trainerId) =>
   API.get(`/trainers/${trainerId}/reviews`);
 export const submitTrainerReview = (trainerId, reviewData) =>
   API.post(`/trainers/${trainerId}/reviews`, reviewData);
+
+export const updateTrainerProfile = (trainerId, updateData) =>
+  API.put(`/trainers/${trainerId}`, updateData);

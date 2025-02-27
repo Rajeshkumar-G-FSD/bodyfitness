@@ -61,3 +61,17 @@ exports.getTrainerById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+
+exports.updateTrainerProfile = async (req, res) => {
+  const { trainerId } = req.params;
+  const updateData = req.body;
+
+  try {
+    const updatedTrainer = await Trainer.findByIdAndUpdate(trainerId, updateData, { new: true });
+    res.status(200).json(updatedTrainer);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating trainer profile", error });
+  }
+};

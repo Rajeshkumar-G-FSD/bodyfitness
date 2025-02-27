@@ -26,6 +26,7 @@ function App() {
           {/* Trainers Page */}
           <Route path="/trainers" element={<Trainers />} />
           <Route path="/trainers/:trainerId" element={<TrainerProfile />} />
+          
 
           {/* Classes Page */}
           <Route path="/classes" element={<Classes />} />
