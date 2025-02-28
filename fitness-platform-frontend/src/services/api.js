@@ -34,7 +34,7 @@ export const fetchClassRecommendations = (userId) =>
 
 // User API calls
 //export const registerUser = (userData) => API.post("/users/register", userData);
-export const loginUser = (credentials) => API.post("/users/login", credentials);
+//export const loginUser = (credentials) => API.post("/users/login", credentials);
 export const updateUserProfile = (userId, profileData) =>
   API.put(`/users/${userId}/profile`, profileData);
 
@@ -53,6 +53,16 @@ export const updateTrainerProfile = (trainerId, updateData) =>
 export const registerUser = async (userData) => {
   try {
     const response = await API.post("/auth/register", userData);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
+// Login a user
+export const loginUser = async (credentials) => {
+  try {
+    const response = await API.post("/auth/login", credentials);
     return response.data;
   } catch (error) {
     throw error.response.data;
