@@ -26,7 +26,6 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 // Login a user
 exports.login = async (req, res) => {
   try {

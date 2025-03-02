@@ -86,3 +86,37 @@ exports.updateTrainerProfile = async (req, res) => {
     res.status(500).json({ message: "Error updating trainer profile", error });
   }
 };
+
+
+exports.createTrainer = async (req, res) => {
+  try {
+    const { name, specialization, bio, photo, video, qualifications, expertise, availableSlots } = req.body;
+
+    // Validate input
+    if (!name || !specialization || !bio) {
+      return res.status(400).json({ message: "Name, specialization, and bio are required." });
+    }
+
+    // Create a new trainer
+    const newTrainer = new Trainer({
+      name,
+      specialization,
+      bio,
+      photo,
+      video,
+      qualifications,
+      expertise,
+      availableSlots,
+    });
+
+    // Save the trainer to the database
+    await newTrainer.save();
+
+    res.status(201).json({
+      message: "Trainer created successfully",
+      trainer: newTrainer,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

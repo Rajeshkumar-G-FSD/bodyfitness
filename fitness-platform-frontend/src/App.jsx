@@ -7,13 +7,13 @@ import Classes from "./pages/Classes";
 import Profile from "./pages/Profile";
 import BookingManagement from "./pages/BookingManagement";
 import ClassRecommendations from "./pages/ClassRecommendations";
-import TrainerFeedback from "./pages/TrainerFeedback";
+import TrainerFeedbackPage from "./pages/TrainerFeedbackPage"; // Import the new page
 import UserBookingsPage from "./pages/UserBookingsPage";
 import TrainerBookingsPage from "./pages/TrainerBookingsPage";
 import TrainerProfile from "./components/TrainerProfile";
 import UserDashboard from "./pages/UserDashboard";
-import Login from "./components/Login"; // Import the Login component
-import Register from "./components/Register"; // Import the Register component
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
   return (
@@ -41,7 +41,7 @@ function App() {
           <Route path="/recommendations" element={<ClassRecommendations />} />
 
           {/* Trainer Feedback Page */}
-          <Route path="/feedback" element={<TrainerFeedback />} />
+          <Route path="/feedback" element={<TrainerFeedbackPage />} />
 
           {/* User Bookings Page */}
           <Route path="/user-bookings" element={<UserBookingsPage />} />

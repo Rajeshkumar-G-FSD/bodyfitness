@@ -21,4 +21,7 @@ router.get("/", trainerController.getTrainers);
 
 router.get("/:trainerId", trainerController.getTrainerProfile);
 
+// Create a new trainer
+router.post("/trainers", trainerController.createTrainer);
+
 module.exports = router;
