@@ -1,9 +1,15 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout(); // Clear the user's login state
+    navigate("/"); // Redirect to the Home page
+  };
 
   return (
     <nav className="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 shadow-lg">
@@ -23,7 +29,7 @@ const Navbar = () => {
           </li>
 
           {/* Show these links only if the user is logged in */}
-          {user && (
+          {user ? (
             <>
               <li>
                 <Link
@@ -65,21 +71,18 @@ const Navbar = () => {
                   Trainer Feedback
                 </Link>
               </li>
+              <li>
+                <button
+                  onClick={handleLogout}
+                  className="text-white hover:text-gray-200 transition-colors duration-300"
+                >
+                  Logout
+                </button>
+              </li>
             </>
-          )}
-
-          {/* Show Login/Register or Logout based on login state */}
-          {user ? (
-            <li>
-              <Link
-                to="/logout"
-                className="text-white hover:text-gray-200 transition-colors duration-300"
-              >
-                Logout
-              </Link>
-            </li>
           ) : (
             <>
+              {/* Show Login and Register links if the user is not logged in */}
               <li>
                 <Link
                   to="/login"
