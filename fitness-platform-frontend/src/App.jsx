@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
+
 import Trainers from "./pages/Trainers";
 import Classes from "./pages/Classes";
 import Profile from "./pages/Profile";
@@ -12,11 +12,16 @@ import UserBookingsPage from "./pages/UserBookingsPage";
 import TrainerBookingsPage from "./pages/TrainerBookingsPage";
 import TrainerProfile from "./components/TrainerProfile";
 import UserDashboard from "./pages/UserDashboard";
-import Login from "./components/Login";
+
 import Register from "./components/Register";
+import Login from "./components/Login.jsx";
+import Home from "./pages/Home.jsx";
+
+import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <Navbar />
       <div className="container mx-auto p-4">
@@ -60,6 +65,7 @@ function App() {
         </Routes>
       </div>
     </Router>
+      </AuthProvider>
   );
 }
 
