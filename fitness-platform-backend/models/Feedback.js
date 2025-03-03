@@ -21,6 +21,10 @@ const FeedbackSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  trainerResponse: {
+    type: String,
+    default: "",
+  },
   date: {
     type: Date,
     default: Date.now,

@@ -3,8 +3,6 @@ import { submitFeedback } from "../services/api";
 
 const FeedbackForm = ({ trainerId, userId }) => {
   const [formData, setFormData] = useState({
-    trainerId,
-    userId,
     rating: 0,
     comment: "",
   });
@@ -12,7 +10,7 @@ const FeedbackForm = ({ trainerId, userId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await submitFeedback(formData);
+      const response = await submitFeedback({ trainerId, userId, ...formData });
       alert("Feedback submitted successfully!");
       console.log(response.data);
     } catch (error) {
@@ -32,7 +30,7 @@ const FeedbackForm = ({ trainerId, userId }) => {
             max="5"
             value={formData.rating}
             onChange={(e) =>
-              setFormData({ ...formData, rating: parseInt(e.target.value) })
+              setFormData({ ...formData, rating: e.target.value })
             }
             className="w-full p-2 border rounded"
             required
