@@ -16,7 +16,7 @@ import UserDashboard from "./pages/UserDashboard";
 import Register from "./components/Register";
 import Login from "./components/Login.jsx";
 import Home from "./pages/Home.jsx";
-
+import CreateTrainerForm from "./components/CreateTrainerForm";
 import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
 
 function App() {

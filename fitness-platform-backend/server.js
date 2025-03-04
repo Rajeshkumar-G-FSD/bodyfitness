@@ -5,6 +5,8 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 
+const trainerRoutes = require("./routes/trainerRoutes");
+
 dotenv.config();
 
 const app = express();
@@ -25,11 +27,17 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 
-app.use("/api/trainers", require("./routes/trainerRoutes"));
+// Use trainer routes
+app.use("/api/trainers", trainerRoutes);
+
+
+//app.use("/api/trainers", require("./routes/trainerRoutes"));
 app.use("/api/classes", require("./routes/classRoutes"));
 app.use("/api/bookings", require("./routes/bookingRoutes")); // Add this line
 app.use("/api/feedback", require("./routes/feedbackRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
+
+
 
 // Start server
 app.listen(PORT, () => {

@@ -74,6 +74,8 @@ export const createNewTrainer = async (trainerData) => {
   }
 };
 
+
+
 // Example usage of createNewTrainer
 // const trainerData = {
 //   name: "John Doe",
