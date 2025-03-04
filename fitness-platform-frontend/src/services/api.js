@@ -21,9 +21,8 @@ export const submitFeedback = (feedbackData) => API.post("/feedback", feedbackDa
 
 // Booking Management API calls
 export const fetchUserBookings = (userId) => API.get(`/users/${userId}/bookings`);
-export const rescheduleBooking = (bookingId, newDate) =>
-  API.put(`/bookings/${bookingId}/reschedule`, { newDate });
-export const cancelBooking = (bookingId) => API.delete(`/bookings/${bookingId}`);
+//export const rescheduleBooking = (bookingId, newDate) =>  API.put(`/bookings/${bookingId}/reschedule`, { newDate });
+//export const cancelBooking = (bookingId) => API.delete(`/bookings/${bookingId}`);
 export const fetchTrainerBookings = (trainerId) =>
   API.get(`/trainers/${trainerId}/bookings`);
 
@@ -74,14 +73,8 @@ export const createNewTrainer = async (trainerData) => {
   }
 };
 
+export const rescheduleBooking = (bookingId, newDate, newTime) =>
+  API.put(`/bookings/${bookingId}/reschedule`, { newDate, newTime });
 
-
-// Example usage of createNewTrainer
-// const trainerData = {
-//   name: "John Doe",
-//   specialization: "Yoga",
-//   bio: "Certified yoga instructor with 10 years of experience.",
-// };
-// createNewTrainer(trainerData)
-//   .then((response) => console.log("Trainer created:", response))
-//   .catch((error) => console.error("Error creating trainer:", error));
+// Cancel booking
+export const cancelBooking = (bookingId) => API.delete(`/bookings/${bookingId}`);

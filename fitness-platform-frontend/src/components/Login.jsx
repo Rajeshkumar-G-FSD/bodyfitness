@@ -26,6 +26,7 @@ const Login = () => {
     }
   };
 
+  const userId = localStorage.getItem("userId");
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-500">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">

@@ -20,6 +20,8 @@ import CreateTrainerForm from "./components/CreateTrainerForm";
 import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
 
 function App() {
+  const userId = localStorage.getItem("userId");
+  
   return (
     <AuthProvider>
     <Router>
@@ -62,6 +64,11 @@ function App() {
 
           {/* Register Page */}
           <Route path="/register" element={<Register />} />
+
+          <Route
+            path="/bookings"
+            element={<BookingManagement userId={userId} />}
+          />
         </Routes>
       </div>
     </Router>

@@ -7,6 +7,8 @@ const userRoutes = require("./routes/userRoutes");
 
 const trainerRoutes = require("./routes/trainerRoutes");
 const classRoutes = require("./routes/classRoutes");
+
+const bookingRoutes = require("./routes/bookingRoutes");
 dotenv.config();
 
 const app = express();
@@ -27,6 +29,8 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 
+// Use booking routes
+app.use("/api/bookings", bookingRoutes);
 // Use trainer routes
 app.use("/api/trainers", trainerRoutes);
 

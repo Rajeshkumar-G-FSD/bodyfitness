@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { fetchUserBookings, rescheduleBooking, cancelBooking } from "../services/api";
+import {
+  fetchUserBookings,
+  rescheduleBooking,
+  cancelBooking,
+} from "../services/api";
 
 const BookingManagement = ({ userId }) => {
   const [bookings, setBookings] = useState([]);
@@ -17,17 +21,23 @@ const BookingManagement = ({ userId }) => {
     fetchBookings();
   }, [userId]);
 
-  const handleReschedule = async (bookingId, newDate) => {
-    try {
-      const response = await rescheduleBooking(bookingId, newDate);
-      setBookings((prev) =>
-        prev.map((booking) =>
-          booking._id === bookingId ? { ...booking, date: newDate } : booking
-        )
-      );
-      alert("Booking rescheduled successfully!");
-    } catch (error) {
-      console.error("Failed to reschedule booking:", error);
+  const handleReschedule = async (bookingId) => {
+    const newDate = prompt("Enter new date (YYYY-MM-DD):");
+    const newTime = prompt("Enter new time (HH:MM AM/PM):");
+    if (newDate && newTime) {
+      try {
+        await rescheduleBooking(bookingId, newDate, newTime);
+        setBookings((prev) =>
+          prev.map((booking) =>
+            booking._id === bookingId
+              ? { ...booking, date: newDate, time: newTime }
+              : booking
+          )
+        );
+        alert("Booking rescheduled successfully!");
+      } catch (error) {
+        console.error("Failed to reschedule booking:", error);
+      }
     }
   };
 
@@ -51,10 +61,7 @@ const BookingManagement = ({ userId }) => {
             <p className="text-gray-600">{booking.date} at {booking.time}</p>
             <div className="mt-2">
               <button
-                onClick={() => {
-                  const newDate = prompt("Enter new date (YYYY-MM-DD):");
-                  if (newDate) handleReschedule(booking._id, newDate);
-                }}
+                onClick={() => handleReschedule(booking._id)}
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-blue-600 transition-colors duration-300"
               >
                 Reschedule
