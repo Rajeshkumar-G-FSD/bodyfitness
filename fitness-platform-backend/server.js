@@ -6,7 +6,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 const trainerRoutes = require("./routes/trainerRoutes");
-
+const classRoutes = require("./routes/classRoutes");
 dotenv.config();
 
 const app = express();
@@ -30,9 +30,12 @@ app.use("/api/user", userRoutes);
 // Use trainer routes
 app.use("/api/trainers", trainerRoutes);
 
+// Use class routes
+app.use("/api/classes", classRoutes);
+
 
 //app.use("/api/trainers", require("./routes/trainerRoutes"));
-app.use("/api/classes", require("./routes/classRoutes"));
+//app.use("/api/classes", require("./routes/classRoutes"));
 app.use("/api/bookings", require("./routes/bookingRoutes")); // Add this line
 app.use("/api/feedback", require("./routes/feedbackRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
