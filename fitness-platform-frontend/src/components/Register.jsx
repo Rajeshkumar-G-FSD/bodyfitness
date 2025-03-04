@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../services/api";
 
-const Register = ({ onRegister }) => {
+const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,10 +14,10 @@ const Register = ({ onRegister }) => {
     e.preventDefault();
     try {
       const response = await registerUser(formData);
-      onRegister(response.data);
-      navigate("/login"); // Redirect to login page after successful registration
+      console.log("Registration successful:", response.data);
+      navigate("/login"); // Redirect to login page
     } catch (error) {
-      console.error("Registration failed:", error);
+      console.error("Registration failed:", error.response?.data || error.message);
     }
   };
 
