@@ -1,79 +1,82 @@
 import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout(); // Clear the user's login state
-    navigate("/"); // Redirect to the Home page
-  };
 
   return (
     <nav className="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-white text-2xl font-bold">
+        <NavLink to="/" className="text-white text-2xl font-bold">
           Fitness Platform
-        </Link>
+        </NavLink>
         <ul className="flex space-x-6">
-          {/* Always show Home link */}
           <li>
-            <Link
+            <NavLink
               to="/"
-              className="text-white hover:text-gray-200 transition-colors duration-300"
+              className={({ isActive }) =>
+                `text-white hover:text-gray-200 transition-colors duration-300 ${
+                  isActive ? "font-bold underline" : ""
+                }`
+              }
             >
               Home
-            </Link>
+            </NavLink>
           </li>
-
-          {/* Show these links only if the user is logged in */}
+          <li>
+            <NavLink
+              to="/classes"
+              className={({ isActive }) =>
+                `text-white hover:text-gray-200 transition-colors duration-300 ${
+                  isActive ? "font-bold underline" : ""
+                }`
+              }
+            >
+              Classes
+            </NavLink>
+          </li>
           {user ? (
             <>
               <li>
-                <Link
-                  to="/classes"
-                  className="text-white hover:text-gray-200 transition-colors duration-300"
-                >
-                  Class Scheduling
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/trainers"
-                  className="text-white hover:text-gray-200 transition-colors duration-300"
-                >
-                  Trainer Profiles
-                </Link>
-              </li>
-              <li>
-                <Link
+                <NavLink
                   to="/bookings"
-                  className="text-white hover:text-gray-200 transition-colors duration-300"
+                  className={({ isActive }) =>
+                    `text-white hover:text-gray-200 transition-colors duration-300 ${
+                      isActive ? "font-bold underline" : ""
+                    }`
+                  }
                 >
                   Booking Management
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to="/recommendations"
-                  className="text-white hover:text-gray-200 transition-colors duration-300"
+                  className={({ isActive }) =>
+                    `text-white hover:text-gray-200 transition-colors duration-300 ${
+                      isActive ? "font-bold underline" : ""
+                    }`
+                  }
                 >
                   Class Recommendations
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to="/feedback"
-                  className="text-white hover:text-gray-200 transition-colors duration-300"
+                  className={({ isActive }) =>
+                    `text-white hover:text-gray-200 transition-colors duration-300 ${
+                      isActive ? "font-bold underline" : ""
+                    }`
+                  }
                 >
-                  Trainer Feedback
-                </Link>
+                  Feedback
+                </NavLink>
               </li>
               <li>
                 <button
-                  onClick={handleLogout}
+                  onClick={logout}
                   className="text-white hover:text-gray-200 transition-colors duration-300"
                 >
                   Logout
@@ -82,22 +85,29 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              {/* Show Login and Register links if the user is not logged in */}
               <li>
-                <Link
+                <NavLink
                   to="/login"
-                  className="text-white hover:text-gray-200 transition-colors duration-300"
+                  className={({ isActive }) =>
+                    `text-white hover:text-gray-200 transition-colors duration-300 ${
+                      isActive ? "font-bold underline" : ""
+                    }`
+                  }
                 >
                   Login
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to="/register"
-                  className="text-white hover:text-gray-200 transition-colors duration-300"
+                  className={({ isActive }) =>
+                    `text-white hover:text-gray-200 transition-colors duration-300 ${
+                      isActive ? "font-bold underline" : ""
+                    }`
+                  }
                 >
                   Register
-                </Link>
+                </NavLink>
               </li>
             </>
           )}

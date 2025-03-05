@@ -12,13 +12,13 @@ import UserBookingsPage from "./pages/UserBookingsPage";
 import TrainerBookingsPage from "./pages/TrainerBookingsPage";
 import TrainerProfile from "./components/TrainerProfile";
 import UserDashboard from "./pages/UserDashboard";
-
+//import ClassRecommendationsPage from "./pages/ClassRecommendationsPage";
 import Register from "./components/Register";
 import Login from "./components/Login.jsx";
 import Home from "./pages/Home.jsx";
 import CreateTrainerForm from "./components/CreateTrainerForm";
 import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
-
+import BookingManagementPage from "./pages/BookingManagementPage.jsx";
 function App() {
   const userId = localStorage.getItem("userId");
   
@@ -43,7 +43,7 @@ function App() {
 
           {/* Booking Management Page */}
           <Route path="/bookings" element={<BookingManagement />} />
-
+          <Route path="/bookings" element={<BookingManagementPage />} />
           {/* Class Recommendations Page */}
           <Route path="/recommendations" element={<ClassRecommendations />} />
 

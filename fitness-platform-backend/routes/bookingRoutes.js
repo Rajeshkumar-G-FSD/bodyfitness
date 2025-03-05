@@ -1,7 +1,7 @@
 const express = require("express");
 const Booking = require("../models/Booking");
 const router = express.Router();
-
+const bookingController = require("../controllers/bookingController");
 // Book a class
 router.post("/", async (req, res) => {
   try {
@@ -51,5 +51,15 @@ router.delete("/:bookingId", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
+
+// Fetch user bookings
+router.get("/users/:userId/bookings", bookingController.getUserBookings);
+
+// Reschedule booking
+router.put("/:bookingId/reschedule", bookingController.rescheduleBooking);
+
+// Cancel booking
+router.delete("/:bookingId", bookingController.cancelBooking);
 
 module.exports = router;
