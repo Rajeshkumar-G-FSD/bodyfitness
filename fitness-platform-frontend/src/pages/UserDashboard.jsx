@@ -10,16 +10,13 @@ const UserDashboard = ({ userId }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
+    const fetchUserDashboard = async (userId) => {
       try {
-        console.log("Fetching dashboard data for user:", userId);
-        const response = await axios.get(`/api/users/${userId}/dashboard`);
-        console.log("Dashboard data received:", response.data);
-        setDashboardData(response.data);
-        setLoading(false);
+        const response = await axios.get(`http://localhost:5000/api/users/${userId}/dashboard`);
+        return response.data;
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
-        setLoading(false);
+        throw error;
       }
     };
 

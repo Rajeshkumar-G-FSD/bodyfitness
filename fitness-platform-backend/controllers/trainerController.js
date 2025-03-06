@@ -58,12 +58,31 @@ exports.getTrainerReviews = async (req, res) => {
 exports.submitTrainerReview = async (req, res) => {
   try {
     const { trainerId } = req.params;
-    const { rating, comment } = req.body;
-    const review = new Review({ trainerId, rating, comment });
+    const { rating, comment, userId } = req.body;
+
+    // Log the request body for debugging
+    console.log("Request Body:", req.body);
+
+    // Validate input
+    if (!rating || !comment || !userId) {
+      return res.status(400).json({ message: "Rating, comment, and userId are required." });
+    }
+
+    // Create a new review
+    const review = new Review({
+      trainerId,
+      userId,
+      rating,
+      comment,
+    });
+
+    // Save the review to the database
     await review.save();
+
     res.status(201).json(review);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error("Error submitting review:", error);
+    res.status(500).json({ message: error.message });
   }
 };
 

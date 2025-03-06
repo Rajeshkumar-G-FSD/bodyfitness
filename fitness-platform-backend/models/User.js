@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   fitnessGoals: { type: String, default: "" },
   preferences: { type: String, default: "" },
+  bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }],
 });
 
 // Hash password before saving

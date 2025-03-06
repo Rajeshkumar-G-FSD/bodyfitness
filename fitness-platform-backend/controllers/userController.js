@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const User = require("../models/User");
 const Booking = require("../models/Booking");
 const Class = require("../models/Class");
@@ -46,9 +47,16 @@ exports.updateUserProfile = async (req, res) => {
   }
 };
 // Get User Dashboard Data
+
+
 exports.getUserDashboard = async (req, res) => {
   try {
     const { userId } = req.params;
+
+    // Validate userId as a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
 
     // Fetch user details
     const user = await User.findById(userId).populate("bookings");

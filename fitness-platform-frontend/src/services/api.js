@@ -78,3 +78,17 @@ export const rescheduleBooking = (bookingId, newDate, newTime) =>
 
 // Cancel booking
 export const cancelBooking = (bookingId) => API.delete(`/bookings/${bookingId}`);
+
+// Submit a review for a trainer
+export const submitReview = async (trainerId, reviewData) => {
+  try {
+    const response = await API.post(`/trainers/${trainerId}/reviews`, {
+      ...reviewData,
+      userId: "67c7c14fbb3aab8427e676e0", // Add the userId here
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to submit review:", error);
+    throw error;
+  }
+};
