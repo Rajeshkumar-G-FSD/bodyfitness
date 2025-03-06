@@ -26,6 +26,18 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
+              to="/trainers"
+              className={({ isActive }) =>
+                `text-white hover:text-gray-200 transition-colors duration-300 ${
+                  isActive ? "font-bold underline" : ""
+                }`
+              }
+            >
+              Trainers
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
               to="/classes"
               className={({ isActive }) =>
                 `text-white hover:text-gray-200 transition-colors duration-300 ${
