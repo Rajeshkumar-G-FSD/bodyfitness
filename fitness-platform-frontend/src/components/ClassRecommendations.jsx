@@ -1,34 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { fetchClassRecommendations } from "../services/api";
+import React from "react";
+import { recommendedClasses } from "../data/recommendedClasses";
 
-const ClassRecommendations = ({ userId }) => {
-  const [recommendations, setRecommendations] = useState([]);
 
-  useEffect(() => {
-    fetchClassRecommendations(userId)
-      .then((response) => setRecommendations(response.data))
-      .catch((error) => console.error(error));
-  }, [userId]);
-
+const ClassRecommendations = () => {
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Class Recommendations</h2>
-      {recommendations.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {recommendations.map((cls) => (
-            <div key={cls._id} className="border p-4 rounded-lg">
-              <h3 className="text-xl font-semibold">{cls.name}</h3>
-              <p className="text-gray-600">{cls.description}</p>
-              <p className="text-sm text-gray-500 mt-2">
-                {cls.date} at {cls.time}
-              </p>
-              <p className="font-semibold text-gray-700">Trainer: {cls.trainer}</p>
+    <div className="min-h-screen bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-4">
+      <div className="container mx-auto">
+        <h2 className="text-3xl font-bold mb-8">Class Recommendations</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {recommendedClasses.map((cls) => (
+            <div
+              key={cls.id}
+              className="bg-white p-6 rounded-lg shadow-lg text-gray-800"
+            >
+              <h3 className="text-xl font-semibold mb-2">{cls.name}</h3>
+              <p className="text-gray-600 mb-4">{cls.description}</p>
+              <div className="text-sm text-gray-500">
+                <p>
+                  <span className="font-semibold">Type:</span> {cls.type}
+                </p>
+                <p>
+                  <span className="font-semibold">Duration:</span> {cls.duration}
+                </p>
+                <p>
+                  <span className="font-semibold">Date:</span> {cls.date}
+                </p>
+                <p>
+                  <span className="font-semibold">Time:</span> {cls.time}
+                </p>
+                <p>
+                  <span className="font-semibold">Trainer:</span> {cls.trainer}
+                </p>
+              </div>
+              <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300">
+                Book Now
+              </button>
             </div>
           ))}
         </div>
-      ) : (
-        <p>No recommendations found.</p>
-      )}
+      </div>
     </div>
   );
 };

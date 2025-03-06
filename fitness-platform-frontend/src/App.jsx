@@ -6,19 +6,20 @@ import Trainers from "./pages/Trainers";
 import Classes from "./pages/Classes";
 import Profile from "./pages/Profile";
 import BookingManagement from "./pages/BookingManagement";
-import ClassRecommendations from "./pages/ClassRecommendations";
+
 import TrainerFeedbackPage from "./pages/TrainerFeedbackPage"; // Import the new page
 import UserBookingsPage from "./pages/UserBookingsPage";
 import TrainerBookingsPage from "./pages/TrainerBookingsPage";
 import TrainerProfile from "./components/TrainerProfile";
 import UserDashboard from "./pages/UserDashboard";
-//import ClassRecommendationsPage from "./pages/ClassRecommendationsPage";
+import ClassRecommendationsPage from "./pages/ClassRecommendationsPage.jsx";
 import Register from "./components/Register";
 import Login from "./components/Login.jsx";
 import Home from "./pages/Home.jsx";
 import CreateTrainerForm from "./components/CreateTrainerForm";
 import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
 import BookingManagementPage from "./pages/BookingManagementPage.jsx";
+
 function App() {
   const userId = localStorage.getItem("userId");
   
@@ -45,7 +46,7 @@ function App() {
           <Route path="/bookings" element={<BookingManagement />} />
           <Route path="/bookings" element={<BookingManagementPage />} />
           {/* Class Recommendations Page */}
-          <Route path="/recommendations" element={<ClassRecommendations />} />
+          <Route path="/recommendations" element={<ClassRecommendationsPage />} />
 
           {/* Trainer Feedback Page */}
           <Route path="/feedback" element={<TrainerFeedbackPage />} />
