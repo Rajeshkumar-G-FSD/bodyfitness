@@ -9,6 +9,10 @@ const TrainerSchema = new mongoose.Schema({
   qualifications: [{ type: String }],
   expertise: [{ type: String }],
   availableSlots: [{ type: String }],
+  availability: {
+    date: { type: String },
+    timeSlots: [{ type: String }],
+  },
 });
 
 module.exports = mongoose.model("Trainer", TrainerSchema);

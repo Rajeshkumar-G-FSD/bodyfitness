@@ -20,7 +20,7 @@ router.post("/:trainerId/reviews", trainerController.submitTrainerReview);
 router.put("/:trainerId", trainerController.updateTrainerProfile);
 
 // Update trainer availability
-router.put("/:trainerId/availability", trainerController.updateTrainerAvailability);
+//router.put("/:trainerId/availability", trainerController.updateTrainerAvailability);
 
 // Get all trainers
 router.get("/", trainerController.getTrainers);
@@ -39,6 +39,25 @@ router.post("/", async (req, res) => {
   }
 });
 
-module.exports = router;
+// Update trainer availability
+router.put("/:trainerId/availability", async (req, res) => {
+  const { trainerId } = req.params;
+  const { date, timeSlots } = req.body;
 
+  try {
+    const trainer = await Trainer.findByIdAndUpdate(
+      trainerId, // Use the MongoDB ObjectId
+      { availability: { date, timeSlots } },
+      { new: true }
+    );
+
+    if (!trainer) {
+      return res.status(404).json({ message: "Trainer not found" });
+    }
+
+    res.status(200).json(trainer);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 module.exports = router;
