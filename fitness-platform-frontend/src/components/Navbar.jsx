@@ -48,6 +48,19 @@ const Navbar = () => {
               Classes
             </NavLink>
           </li>
+          {/* Add Payment Link */}
+          <li>
+            <NavLink
+              to="/payment"
+              className={({ isActive }) =>
+                `text-white hover:text-gray-200 transition-colors duration-300 ${
+                  isActive ? "font-bold underline" : ""
+                }`
+              }
+            >
+              Payment
+            </NavLink>
+          </li>
           {user ? (
             <>
               <li>

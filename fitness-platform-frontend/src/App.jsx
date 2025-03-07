@@ -20,6 +20,8 @@ import CreateTrainerForm from "./components/CreateTrainerForm";
 import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
 import BookingManagementPage from "./pages/BookingManagementPage.jsx";
 
+import PaymentPage from "./pages/PaymentPage.jsx"; // Import the new page
+
 function App() {
   const userId = localStorage.getItem("userId");
   
@@ -59,7 +61,10 @@ function App() {
 
           {/* User Dashboard Page */}
           <Route path="/dashboard" element={<UserDashboard userId="user-id-here" />} />
-
+        
+          {/* Other routes */}
+          <Route path="/payment" element={<PaymentPage />} />
+       
           {/* Login Page */}
           <Route path="/login" element={<Login />} />
 
