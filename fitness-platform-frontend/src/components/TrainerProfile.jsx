@@ -13,7 +13,7 @@ const TrainerProfile = () => {
  
     const fetchTrainer = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/trainers/${trainerId}`);
+        const response = await axios.get(`https://renderbackend-1-gw0j.onrender.com/api/trainers/${trainerId}`);
         console.log(response)
         setTrainer(response.data);
         setLoading(false);

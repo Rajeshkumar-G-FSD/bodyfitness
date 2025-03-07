@@ -12,7 +12,7 @@ const UserDashboard = ({ userId }) => {
   useEffect(() => {
     const fetchUserDashboard = async (userId) => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/users/${userId}/dashboard`);
+        const response = await axios.get(`https://renderbackend-1-gw0j.onrender.com/api/users/${userId}/dashboard`);
         return response.data;
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);

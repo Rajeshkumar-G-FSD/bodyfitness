@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // Base URL for all API calls
+  baseURL: "https://renderbackend-1-gw0j.onrender.com/api", // Base URL for all API calls
 });
 
 // Create a new trainer
