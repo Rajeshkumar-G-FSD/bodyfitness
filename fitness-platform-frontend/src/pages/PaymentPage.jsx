@@ -1,93 +1,169 @@
-// frontend/pages/PaymentPage.jsx
 import React, { useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
+import "./PaymentPage.css"; // Import CSS for styling
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+const PaymentPage = () => {
+  const [cardholderName, setCardholderName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-const PaymentForm = () => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [amount, setAmount] = useState(1000); // Amount in cents
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  // Format card number (XXXX XXXX XXXX XXXX)
+  const formatCardNumber = (value) => {
+    const cleanedValue = value.replace(/\s/g, "");
+    if (cleanedValue.length > 16) return cleanedValue.slice(0, 16);
+    return cleanedValue.match(/.{1,4}/g)?.join(" ") || "";
+  };
 
-  const handlePayment = async (e) => {
+  // Format expiration date (MM/YY)
+  const formatExpirationDate = (value) => {
+    const cleanedValue = value.replace(/\D/g, "");
+    if (cleanedValue.length > 2) {
+      return cleanedValue.slice(0, 2) + "/" + cleanedValue.slice(2, 4);
+    }
+    return cleanedValue;
+  };
+
+  // Format CVV (3 or 4 digits)
+  const formatCvv = (value) => {
+    return value.replace(/\D/g, "").slice(0, 4);
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
-    if (!stripe || !elements) {
+    // Validate inputs
+    if (!cardholderName || !cardNumber || !expirationDate || !cvv) {
+      setError("Please fill out all fields.");
       return;
     }
 
+    // Validate card number (16 digits)
+    const formattedCardNumber = cardNumber.replace(/\s/g, "");
+    if (formattedCardNumber.length !== 16 || !/^\d+$/.test(formattedCardNumber)) {
+      setError("Please enter a valid 16-digit card number.");
+      return;
+    }
+
+    // Validate expiration date (MM/YY)
+    if (!/^\d{2}\/\d{2}$/.test(expirationDate)) {
+      setError("Please enter a valid expiration date (MM/YY).");
+      return;
+    }
+
+    // Validate CVV (3 or 4 digits)
+    if (!/^\d{3,4}$/.test(cvv)) {
+      setError("Please enter a valid CVV (3 or 4 digits).");
+      return;
+    }
+
+    // Prepare payment data
+    const paymentData = {
+      cardholderName,
+      cardNumber: formattedCardNumber,
+      expirationDate,
+      cvv,
+    };
+
+    // Disable button to prevent multiple submissions
+    setIsLoading(true);
+    setError("");
+
     try {
-      // Create a payment intent
-      const response = await axios.post("/api/payment/create-payment-intent", {
-        amount,
-        currency: "usd",
-      });
+      // Call payment API
+      const response = await axios.post(
+        "https://your-payment-api.com/process-payment",
+        paymentData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      const { clientSecret } = response.data;
-
-      // Confirm the payment
-      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      });
-
-      if (error) {
-        setError(error.message);
-      } else if (paymentIntent.status === "succeeded") {
+      if (response.status === 200) {
         alert("Payment successful!");
+        // Redirect or show success message
+      } else {
+        setError(`Payment failed: ${response.data.message}`);
       }
     } catch (error) {
-      setError("Payment failed. Please try again.");
+      setError("An error occurred. Please try again.");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handlePayment} className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium">Amount (in USD)</label>
-        <input
-          type="number"
-          value={amount / 100} // Convert cents to dollars
-          onChange={(e) => setAmount(e.target.value * 100)}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium">Card Details</label>
-        <CardElement className="p-2 border rounded" />
-      </div>
-      {error && <p className="text-red-500">{error}</p>}
-      <button
-        type="submit"
-        disabled={!stripe || loading}
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300"
-      >
-        {loading ? "Processing..." : "Pay Now"}
-      </button>
-    </form>
-  );
-};
-
-const PaymentPage = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-500 to-indigo-500 text-white">
-      <div className="container mx-auto p-4">
-        <h1 className="text-4xl font-bold mb-8">Payment</h1>
-        <div className="bg-white p-6 rounded-lg shadow-lg text-gray-800">
-          <Elements stripe={stripePromise}>
-            <PaymentForm />
-          </Elements>
+    <div className="payment-container">
+      <h1>Payment Details</h1>
+      <form onSubmit={handleSubmit}>
+        {/* Cardholder Name */}
+        <div className="form-group">
+          <label htmlFor="cardholder-name">Cardholder Name</label>
+          <input
+            type="text"
+            id="cardholder-name"
+            placeholder="John Doe"
+            value={cardholderName}
+            onChange={(e) => setCardholderName(e.target.value)}
+            required
+          />
         </div>
-      </div>
+
+        {/* Card Number */}
+        <div className="form-group">
+          <label htmlFor="card-number">Card Number</label>
+          <input
+            type="text"
+            id="card-number"
+            placeholder="1234 5678 9012 3456"
+            value={cardNumber}
+            onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
+            maxLength={19}
+            required
+          />
+        </div>
+
+        {/* Expiration Date and CVV */}
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="expiration-date">Expiration Date</label>
+            <input
+              type="text"
+              id="expiration-date"
+              placeholder="MM/YY"
+              value={expirationDate}
+              onChange={(e) => setExpirationDate(formatExpirationDate(e.target.value))}
+              maxLength={5}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="cvv">CVV</label>
+            <input
+              type="text"
+              id="cvv"
+              placeholder="123"
+              value={cvv}
+              onChange={(e) => setCvv(formatCvv(e.target.value))}
+              maxLength={4}
+              required
+            />
+          </div>
+        </div>
+
+        {/* Error Message */}
+        {error && <p className="error-message">{error}</p>}
+
+        {/* Payment Button */}
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Processing..." : "Pay Now"}
+        </button>
+      </form>
     </div>
   );
 };
