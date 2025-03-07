@@ -55,6 +55,22 @@ const PaymentForm = () => {
     }
   };
 
+  // Custom styles for the CardElement
+  const cardElementOptions = {
+    style: {
+      base: {
+        fontSize: "16px", // Increase font size
+        color: "#424770",
+        "::placeholder": {
+          color: "#aab7c4",
+        },
+      },
+      invalid: {
+        color: "#9e2146",
+      },
+    },
+  };
+
   return (
     <form onSubmit={handlePayment} className="space-y-4">
       {/* Name */}
@@ -84,7 +100,9 @@ const PaymentForm = () => {
       {/* Card Details */}
       <div>
         <label className="block text-sm font-medium">Card Details</label>
-        <CardElement className="p-2 border rounded" />
+        <div className="p-4 border rounded bg-gray-50">
+          <CardElement options={cardElementOptions} />
+        </div>
       </div>
 
       {/* CVV */}
