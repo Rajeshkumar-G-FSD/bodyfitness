@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin:'http://localhost:5173'
+  origin:'https://renderbackend-1-gw0j.onrender.com/'
 }));
 app.use(express.json());
 
