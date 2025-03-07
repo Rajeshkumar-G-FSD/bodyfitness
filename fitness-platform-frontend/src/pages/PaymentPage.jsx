@@ -1,4 +1,3 @@
-// frontend/pages/PaymentPage.jsx
 import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
@@ -9,7 +8,9 @@ const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 const PaymentForm = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const [name, setName] = useState("");
   const [amount, setAmount] = useState(1000); // Amount in cents
+  const [cvv, setCvv] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -26,6 +27,8 @@ const PaymentForm = () => {
       const response = await axios.post("/api/payment/create-payment-intent", {
         amount,
         currency: "usd",
+        name,
+        cvv,
       });
 
       const { clientSecret } = response.data;
@@ -34,6 +37,9 @@ const PaymentForm = () => {
       const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: elements.getElement(CardElement),
+          billing_details: {
+            name,
+          },
         },
       });
 
@@ -51,6 +57,19 @@ const PaymentForm = () => {
 
   return (
     <form onSubmit={handlePayment} className="space-y-4">
+      {/* Name */}
+      <div>
+        <label className="block text-sm font-medium">Cardholder Name</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full p-2 border rounded"
+          required
+        />
+      </div>
+
+      {/* Amount */}
       <div>
         <label className="block text-sm font-medium">Amount (in USD)</label>
         <input
@@ -61,11 +80,30 @@ const PaymentForm = () => {
           required
         />
       </div>
+
+      {/* Card Details */}
       <div>
         <label className="block text-sm font-medium">Card Details</label>
         <CardElement className="p-2 border rounded" />
       </div>
+
+      {/* CVV */}
+      <div>
+        <label className="block text-sm font-medium">CVV</label>
+        <input
+          type="text"
+          value={cvv}
+          onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 4))}
+          className="w-full p-2 border rounded"
+          maxLength={4}
+          required
+        />
+      </div>
+
+      {/* Error Message */}
       {error && <p className="text-red-500">{error}</p>}
+
+      {/* Payment Button */}
       <button
         type="submit"
         disabled={!stripe || loading}
