@@ -20,6 +20,7 @@ import CreateTrainerForm from "./components/CreateTrainerForm";
 import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
 import BookingManagementPage from "./pages/BookingManagementPage.jsx";
 
+
 import PaymentPage from "./pages/PaymentPage.jsx"; // Import the new page
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
 
           {/* Trainer Bookings Page */}
           <Route path="/trainer-bookings" element={<TrainerBookingsPage />} />
+
 
           {/* User Dashboard Page */}
           <Route path="/dashboard" element={<UserDashboard userId="user-id-here" />} />
