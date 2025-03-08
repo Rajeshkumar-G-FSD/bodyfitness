@@ -7,7 +7,9 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const classId = queryParams.get("classId");
-
+  const handlePaymentSuccess = () => {
+    navigate("/payment-success"); // Redirect to the PaymentSuccess page
+  };
   const [name, setName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
