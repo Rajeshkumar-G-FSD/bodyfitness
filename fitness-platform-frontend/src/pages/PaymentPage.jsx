@@ -6,7 +6,7 @@ const PaymentPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-  const classId = queryParams.get("classId") || "64f1b2c8e4b0d1a2b3c4d5e7"; // Set a default classId if not provided
+  const bookingId = queryParams.get("bookingId") || "default-booking-id"; // Use a default booking ID if not provided
 
   const [name, setName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -17,13 +17,19 @@ const PaymentPage = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (classId) {
-      // Fetch class details using classId if needed
-      // axios.get(`/api/classes/${classId}`).then(response => {
-      //   setClassDetails(response.data);
-      // });
+    if (bookingId) {
+      // Fetch booking details if needed
+      axios
+        .get(`https://renderbackend-1-gw0j.onrender.com/api/bookings/${bookingId}`)
+        .then((response) => {
+          console.log("Booking Details:", response.data);
+        })
+        .catch((error) => {
+          console.error("Failed to fetch booking details:", error);
+          setError("Failed to fetch booking details. Please try again.");
+        });
     }
-  }, [classId]);
+  }, [bookingId]);
 
   const handlePayment = async (e) => {
     e.preventDefault();
@@ -44,7 +50,7 @@ const PaymentPage = () => {
 
       // Fetch booking details (if needed)
       const bookingResponse = await axios.get(
-        `https://renderbackend-1-gw0j.onrender.com/api/bookings/${classId}`
+        `https://renderbackend-1-gw0j.onrender.com/api/bookings/${bookingId}`
       );
       const bookingDetails = bookingResponse.data;
 
@@ -53,7 +59,7 @@ const PaymentPage = () => {
         "https://renderbackend-1-gw0j.onrender.com/api/payment/payment-success",
         {
           paymentIntentId: paymentIntentId,
-          bookingId: classId,
+          bookingId: bookingId,
           booking: bookingDetails,
         }
       );
