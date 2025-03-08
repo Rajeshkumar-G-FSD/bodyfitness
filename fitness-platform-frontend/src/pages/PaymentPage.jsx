@@ -48,6 +48,15 @@ const PaymentPage = () => {
 
       const { clientSecret, paymentIntentId } = paymentIntentResponse.data;
 
+      // Example usage
+const bookingId = "67cc926ee2f56e41beb4a3a3"; // Replace with the actual bookingId
+
+if (!isValidObjectId(bookingId)) {
+  console.error("Invalid booking ID");
+  return; // Stop further execution
+}
+
+
       // Fetch booking details (if needed)
       const bookingResponse = await axios.get(
         `https://renderbackend-1-gw0j.onrender.com/api/bookings/${bookingId}`
