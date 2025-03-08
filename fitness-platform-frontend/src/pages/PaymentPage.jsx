@@ -46,13 +46,13 @@ const PaymentPage = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+  
     try {
       // Validate the bookingId
       if (!isValidObjectId(bookingId)) {
         throw new Error("Invalid booking ID");
       }
-
+  
       // Create Payment Intent
       const paymentIntentResponse = await axios.post(
         "https://renderbackend-1-gw0j.onrender.com/api/payment/create-payment-intent",
@@ -61,15 +61,15 @@ const PaymentPage = () => {
           currency: "usd",
         }
       );
-
+  
       const { clientSecret, paymentIntentId } = paymentIntentResponse.data;
-
-      // Fetch booking details (if needed)
+  
+      // Fetch booking details
       const bookingResponse = await axios.get(
         `https://renderbackend-1-gw0j.onrender.com/api/bookings/${bookingId}`
       );
       const bookingDetails = bookingResponse.data;
-
+  
       // Handle payment success
       const successResponse = await axios.post(
         "https://renderbackend-1-gw0j.onrender.com/api/payment/payment-success",
@@ -79,7 +79,7 @@ const PaymentPage = () => {
           booking: bookingDetails,
         }
       );
-
+  
       if (successResponse.status === 200) {
         alert("Payment successful!");
         navigate("/"); // Redirect to home page or any other page after successful payment
