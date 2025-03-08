@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { Elements, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
@@ -9,8 +9,10 @@ const PaymentForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [name, setName] = useState("");
-  const [amount, setAmount] = useState(1000); // Amount in cents
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
+  const [amount, setAmount] = useState(1000); // Amount in cents
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -28,6 +30,8 @@ const PaymentForm = () => {
         amount,
         currency: "usd",
         name,
+        cardNumber,
+        expiry,
         cvv,
       });
 
@@ -36,7 +40,7 @@ const PaymentForm = () => {
       // Confirm the payment
       const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: elements.getElement(CardElement),
+          card: elements.getElement("card"), // Use a custom card element
           billing_details: {
             name,
           },
@@ -55,20 +59,20 @@ const PaymentForm = () => {
     }
   };
 
-  // Custom styles for the CardElement
-  const cardElementOptions = {
-    style: {
-      base: {
-        fontSize: "16px", // Increase font size
-        color: "#424770",
-        "::placeholder": {
-          color: "#aab7c4",
-        },
-      },
-      invalid: {
-        color: "#9e2146",
-      },
-    },
+  // Format card number (XXXX XXXX XXXX XXXX)
+  const formatCardNumber = (value) => {
+    const cleanedValue = value.replace(/\s/g, "");
+    if (cleanedValue.length > 16) return cleanedValue.slice(0, 16);
+    return cleanedValue.match(/.{1,4}/g)?.join(" ") || "";
+  };
+
+  // Format expiration date (MM/YY)
+  const formatExpiry = (value) => {
+    const cleanedValue = value.replace(/\D/g, "");
+    if (cleanedValue.length > 2) {
+      return cleanedValue.slice(0, 2) + "/" + cleanedValue.slice(2, 4);
+    }
+    return cleanedValue;
   };
 
   return (
@@ -85,6 +89,48 @@ const PaymentForm = () => {
         />
       </div>
 
+      {/* Card Number */}
+      <div>
+        <label className="block text-sm font-medium">Card Number</label>
+        <input
+          type="text"
+          value={cardNumber}
+          onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
+          placeholder="1234 5678 9012 3456"
+          className="w-full p-2 border rounded"
+          maxLength={19}
+          required
+        />
+      </div>
+
+      {/* Expiration Date and CVV */}
+      <div className="form-row">
+        <div className="form-group">
+          <label className="block text-sm font-medium">Expiration Date</label>
+          <input
+            type="text"
+            value={expiry}
+            onChange={(e) => setExpiry(formatExpiry(e.target.value))}
+            placeholder="MM/YY"
+            className="w-full p-2 border rounded"
+            maxLength={5}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label className="block text-sm font-medium">CVV</label>
+          <input
+            type="text"
+            value={cvv}
+            onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 4))}
+            placeholder="123"
+            className="w-full p-2 border rounded"
+            maxLength={4}
+            required
+          />
+        </div>
+      </div>
+
       {/* Amount */}
       <div>
         <label className="block text-sm font-medium">Amount (in USD)</label>
@@ -93,27 +139,6 @@ const PaymentForm = () => {
           value={amount / 100} // Convert cents to dollars
           onChange={(e) => setAmount(e.target.value * 100)}
           className="w-full p-2 border rounded"
-          required
-        />
-      </div>
-
-      {/* Card Details */}
-      <div>
-        <label className="block text-sm font-medium">Card Details</label>
-        <div className="p-4 border rounded bg-gray-50">
-          <CardElement options={cardElementOptions} />
-        </div>
-      </div>
-
-      {/* CVV */}
-      <div>
-        <label className="block text-sm font-medium">CVV</label>
-        <input
-          type="text"
-          value={cvv}
-          onChange={(e) => setCvv(e.target.value.replace(/\D/g, "").slice(0, 4))}
-          className="w-full p-2 border rounded"
-          maxLength={4}
           required
         />
       </div>
