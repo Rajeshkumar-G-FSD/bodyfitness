@@ -81,7 +81,7 @@ const PaymentPage = () => {
       );
   
       if (successResponse.status === 200) {
-        alert("Payment successful!");
+        alert("Payment !");
         navigate("/"); // Redirect to home page or any other page after successful payment
       } else {
         setError("Payment failed. Please try again.");
