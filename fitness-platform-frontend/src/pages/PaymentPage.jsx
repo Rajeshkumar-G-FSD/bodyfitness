@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const PaymentPage = () => {
+  // State for form fields and other variables
   const [name, setName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
@@ -75,7 +76,17 @@ const PaymentPage = () => {
         setError("Payment failed. Please try again.");
       }
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        setError(`Payment failed: ${error.response.data.message || "Unknown error"}`);
+      } else if (error.request) {
+        // The request was made but no response was received
+        setError("No response from the server. Please try again.");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setError("An error occurred. Please try again.");
+      }
       console.error("Payment Error:", error);
     } finally {
       setLoading(false);
@@ -115,8 +126,8 @@ const PaymentPage = () => {
             </div>
 
             {/* Expiration Date and CVV */}
-            <div className="form-row">
-              <div className="form-group">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
                 <label className="block text-sm font-medium">Expiration Date</label>
                 <input
                   type="text"
@@ -128,7 +139,7 @@ const PaymentPage = () => {
                   required
                 />
               </div>
-              <div className="form-group">
+              <div>
                 <label className="block text-sm font-medium">CVV</label>
                 <input
                   type="text"
