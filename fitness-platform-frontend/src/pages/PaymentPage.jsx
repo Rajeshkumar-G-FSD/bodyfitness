@@ -75,13 +75,10 @@ const PaymentPage = () => {
     }
 
     try {
-      const paymentIntentResponse = await axios.post(
-        "https://renderbackend-1-gw0j.onrender.com/api/payment/create-payment-intent",
-        {
-          amount: parseFloat(amount) * 100,
-          currency: "usd",
-        }
-      );
+      const paymentIntentResponse = await axios.post("https://renderbackend-1-gw0j.onrender.com/api/payment/create-payment-intent", {
+        amount: parseFloat(amount) * 100,
+        currency: "usd",
+      });
 
       const { clientSecret, paymentIntentId } = paymentIntentResponse.data;
 
