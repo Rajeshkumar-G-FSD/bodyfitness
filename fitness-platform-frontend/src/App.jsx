@@ -69,7 +69,7 @@ function App() {
        
           {/* Login Page */}
           <Route path="/login" element={<Login />} />
-
+          <Route path="/payment-success" element={<PaymentSuccess />} />
           {/* Register Page */}
           <Route path="/register" element={<Register />} />
 

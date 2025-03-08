@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const PaymentPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const classId = queryParams.get("classId");
 
@@ -80,37 +81,51 @@ const PaymentPage = () => {
     }
 
     try {
-      const paymentIntentResponse = await axios.post("https://renderbackend-1-gw0j.onrender.com/api/payment/create-payment-intent", {
-        amount: parseFloat(amount) * 100,
-        currency: "usd",
-      });
-
-      const { clientSecret, paymentIntentId } = paymentIntentResponse.data;
-
-      // Use the classId from the URL query parameters
-      const bookingId = classId || "64f1b2c3e4b0f5a2d8e7f8a9"; // Fallback to a default booking ID if classId is not provided
-      const bookingResponse = await axios.get(
-        `https://renderbackend-1-gw0j.onrender.com/api/bookings/${bookingId}`
-      );
-
-      const bookingDetails = bookingResponse.data;
-
-      const successResponse = await axios.post(
-        "https://renderbackend-1-gw0j.onrender.com/api/payment/payment-success",
+      // Step 1: Create a Payment Intent
+      const paymentIntentResponse = await axios.post(
+        "https://renderbackend-1-gw0j.onrender.com/api/payment/create-payment-intent",
         {
-          paymentIntentId: paymentIntentId,
-          bookingId: bookingId,
-          booking: bookingDetails,
+          amount: parseFloat(amount) * 100, // Convert to cents
+          currency: "usd",
         }
       );
 
-      if (successResponse.status === 200) {
-        alert("Payment successful!");
-        setName("");
-        setCardNumber("");
-        setExpiry("");
-        setCvv("");
-        setAmount("");
+      const { clientSecret, paymentIntentId } = paymentIntentResponse.data;
+
+      // Step 2: Confirm the Payment
+      const stripeResponse = await axios.post(
+        "https://renderbackend-1-gw0j.onrender.com/api/payment/confirm-payment",
+        {
+          paymentIntentId,
+          paymentMethod: "card", // Assuming card payment
+          cardDetails: {
+            name,
+            cardNumber,
+            expiry,
+            cvv,
+          },
+        }
+      );
+
+      if (stripeResponse.data.status === "succeeded") {
+        // Step 3: Handle Payment Success
+        const bookingResponse = await axios.post(
+          "https://renderbackend-1-gw0j.onrender.com/api/bookings",
+          {
+            classId,
+            userId: "user-id-here", // Replace with actual user ID from context or auth
+            paymentIntentId,
+            amount: parseFloat(amount),
+          }
+        );
+
+        if (bookingResponse.status === 201) {
+          // Payment and booking successful
+          alert("Payment successful! Your booking has been confirmed.");
+          navigate("/payment-success"); // Redirect to a success page
+        } else {
+          setError("Booking failed. Please contact support.");
+        }
       } else {
         setError("Payment failed. Please try again.");
       }
