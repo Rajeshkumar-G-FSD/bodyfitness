@@ -2,11 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// Utility function to check if a string is a valid MongoDB ObjectId
+const isValidObjectId = (id) => {
+  return /^[0-9a-fA-F]{24}$/.test(id);
+};
+
 const PaymentPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
-  const bookingId = queryParams.get("bookingId") || "default-booking-id"; // Use a default booking ID if not provided
+  const bookingId = queryParams.get("bookingId") || "67cc926ee2f56e41beb4a3a3"; // Use a default booking ID if not provided
 
   const [name, setName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
@@ -18,6 +23,12 @@ const PaymentPage = () => {
 
   useEffect(() => {
     if (bookingId) {
+      // Validate the bookingId before making the API request
+      if (!isValidObjectId(bookingId)) {
+        setError("Invalid booking ID");
+        return;
+      }
+
       // Fetch booking details if needed
       axios
         .get(`https://renderbackend-1-gw0j.onrender.com/api/bookings/${bookingId}`)
@@ -37,6 +48,11 @@ const PaymentPage = () => {
     setError("");
 
     try {
+      // Validate the bookingId
+      if (!isValidObjectId(bookingId)) {
+        throw new Error("Invalid booking ID");
+      }
+
       // Create Payment Intent
       const paymentIntentResponse = await axios.post(
         "https://renderbackend-1-gw0j.onrender.com/api/payment/create-payment-intent",
@@ -47,15 +63,6 @@ const PaymentPage = () => {
       );
 
       const { clientSecret, paymentIntentId } = paymentIntentResponse.data;
-
-      // Example usage
-const bookingId = "67cc926ee2f56e41beb4a3a3"; // Replace with the actual bookingId
-
-if (!isValidObjectId(bookingId)) {
-  console.error("Invalid booking ID");
-  return; // Stop further execution
-}
-
 
       // Fetch booking details (if needed)
       const bookingResponse = await axios.get(
