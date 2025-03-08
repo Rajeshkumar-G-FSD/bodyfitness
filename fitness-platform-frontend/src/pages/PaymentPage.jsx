@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 const PaymentPage = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const classId = queryParams.get("classId");
+
   const [name, setName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
@@ -82,7 +87,8 @@ const PaymentPage = () => {
 
       const { clientSecret, paymentIntentId } = paymentIntentResponse.data;
 
-      const bookingId = "64f1b2c3e4b0f5a2d8e7f8a9";
+      // Use the classId from the URL query parameters
+      const bookingId = classId || "64f1b2c3e4b0f5a2d8e7f8a9"; // Fallback to a default booking ID if classId is not provided
       const bookingResponse = await axios.get(
         `https://renderbackend-1-gw0j.onrender.com/api/bookings/${bookingId}`
       );

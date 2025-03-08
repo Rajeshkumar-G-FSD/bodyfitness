@@ -1,8 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { recommendedClasses } from "../data/recommendedClasses";
 
-
 const ClassRecommendations = () => {
+  const navigate = useNavigate();
+
+  const handleBookNow = (classId) => {
+    // Navigate to the payment page with the classId as a parameter
+    navigate(`/payment?classId=${classId}`);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-purple-500 to-indigo-500 text-white p-4">
       <div className="container mx-auto">
@@ -32,7 +39,10 @@ const ClassRecommendations = () => {
                   <span className="font-semibold">Trainer:</span> {cls.trainer}
                 </p>
               </div>
-              <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300">
+              <button
+                onClick={() => handleBookNow(cls.id)}
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300"
+              >
                 Book Now
               </button>
             </div>
