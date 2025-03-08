@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const PaymentPage = () => {
-  // State for form fields and other variables
   const [name, setName] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiry, setExpiry] = useState("");
@@ -11,14 +10,12 @@ const PaymentPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Format card number (XXXX XXXX XXXX XXXX)
   const formatCardNumber = (value) => {
     const cleanedValue = value.replace(/\s/g, "");
     if (cleanedValue.length > 16) return cleanedValue.slice(0, 16);
     return cleanedValue.match(/.{1,4}/g)?.join(" ") || "";
   };
 
-  // Format expiration date (MM/YY)
   const formatExpiry = (value) => {
     const cleanedValue = value.replace(/\D/g, "");
     if (cleanedValue.length > 2) {
@@ -26,54 +23,86 @@ const PaymentPage = () => {
     }
     return cleanedValue;
   };
+
+  const validateForm = () => {
+    if (!name || !cardNumber || !expiry || !cvv || !amount) {
+      setError("Please fill out all fields.");
+      return false;
+    }
+
+    const cleanedCardNumber = cardNumber.replace(/\s/g, "");
+    if (cleanedCardNumber.length !== 16 || !/^\d+$/.test(cleanedCardNumber)) {
+      setError("Invalid card number. Please enter 16 digits.");
+      return false;
+    }
+
+    const [month, year] = expiry.split("/");
+    const currentYear = new Date().getFullYear() % 100;
+    const currentMonth = new Date().getMonth() + 1;
+
+    if (
+      !/^\d{2}\/\d{2}$/.test(expiry) ||
+      parseInt(month) < 1 ||
+      parseInt(month) > 12 ||
+      parseInt(year) < currentYear ||
+      (parseInt(year) === currentYear && parseInt(month) < currentMonth)
+    ) {
+      setError("Invalid expiration date. Please use MM/YY format.");
+      return false;
+    }
+
+    if (!/^\d{3,4}$/.test(cvv)) {
+      setError("Invalid CVV. Please enter 3 or 4 digits.");
+      return false;
+    }
+
+    if (isNaN(amount) || parseFloat(amount) <= 0) {
+      setError("Invalid amount. Please enter a positive number.");
+      return false;
+    }
+
+    return true;
+  };
+
   const handlePayment = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-  
-    // Validate all fields
-    if (!name || !cardNumber || !expiry || !cvv || !amount) {
-      setError("Please fill out all fields.");
+
+    if (!validateForm()) {
       setLoading(false);
       return;
     }
-  
+
     try {
-      // Step 1: Call the first API to create a payment intent
       const paymentIntentResponse = await axios.post(
         "https://renderbackend-1-gw0j.onrender.com/api/payment/create-payment-intent",
         {
-          amount: parseFloat(amount) * 100, // Convert to cents
+          amount: parseFloat(amount) * 100,
           currency: "usd",
         }
       );
-  
-      const { clientSecret } = paymentIntentResponse.data;
-  
-      console.log("Payment Intent Created:", clientSecret);
-  
-      // Step 2: Fetch booking details (if needed)
-      // Replace "64f1b2c3e4b0f5a2d8e7f8a9" with a dynamic booking ID if applicable
+
+      const { clientSecret, paymentIntentId } = paymentIntentResponse.data;
+
       const bookingId = "64f1b2c3e4b0f5a2d8e7f8a9";
       const bookingResponse = await axios.get(
         `https://renderbackend-1-gw0j.onrender.com/api/bookings/${bookingId}`
       );
-  
+
       const bookingDetails = bookingResponse.data;
-  
-      // Step 3: Call the second API to confirm payment success
+
       const successResponse = await axios.post(
         "https://renderbackend-1-gw0j.onrender.com/api/payment/payment-success",
         {
-          paymentIntentId: clientSecret, // Use the client secret as paymentIntentId
-          bookingId: bookingId, // Replace with actual booking ID
-          booking: bookingDetails, // Include booking details if required
+          paymentIntentId: paymentIntentId,
+          bookingId: bookingId,
+          booking: bookingDetails,
         }
       );
-  
+
       if (successResponse.status === 200) {
         alert("Payment successful!");
-        // Reset form
         setName("");
         setCardNumber("");
         setExpiry("");
@@ -84,14 +113,10 @@ const PaymentPage = () => {
       }
     } catch (error) {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         setError(`Payment failed: ${error.response.data.message || "Unknown error"}`);
       } else if (error.request) {
-        // The request was made but no response was received
         setError("No response from the server. Please try again.");
       } else {
-        // Something happened in setting up the request that triggered an Error
         setError("An error occurred. Please try again.");
       }
       console.error("Payment Error:", error);
@@ -106,7 +131,6 @@ const PaymentPage = () => {
         <h1 className="text-4xl font-bold mb-8">Payment</h1>
         <div className="bg-white p-6 rounded-lg shadow-lg text-gray-800">
           <form onSubmit={handlePayment} className="space-y-4">
-            {/* Name */}
             <div>
               <label className="block text-sm font-medium">Cardholder Name</label>
               <input
@@ -118,7 +142,6 @@ const PaymentPage = () => {
               />
             </div>
 
-            {/* Card Number */}
             <div>
               <label className="block text-sm font-medium">Card Number</label>
               <input
@@ -132,7 +155,6 @@ const PaymentPage = () => {
               />
             </div>
 
-            {/* Expiration Date and CVV */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium">Expiration Date</label>
@@ -160,7 +182,6 @@ const PaymentPage = () => {
               </div>
             </div>
 
-            {/* Amount */}
             <div>
               <label className="block text-sm font-medium">Amount (in USD)</label>
               <input
@@ -172,16 +193,40 @@ const PaymentPage = () => {
               />
             </div>
 
-            {/* Error Message */}
             {error && <p className="text-red-500">{error}</p>}
 
-            {/* Payment Button */}
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300"
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300 disabled:bg-blue-300"
             >
-              {loading ? "Processing..." : "Pay Now"}
+              {loading ? (
+                <div className="flex items-center">
+                  <svg
+                    className="animate-spin h-5 w-5 mr-3 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Processing...
+                </div>
+              ) : (
+                "Pay Now"
+              )}
             </button>
           </form>
         </div>
