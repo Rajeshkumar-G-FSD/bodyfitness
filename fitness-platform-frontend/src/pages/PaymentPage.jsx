@@ -26,20 +26,18 @@ const PaymentPage = () => {
     }
     return cleanedValue;
   };
-
-  // Handle form submission
   const handlePayment = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+  
     // Validate all fields
     if (!name || !cardNumber || !expiry || !cvv || !amount) {
       setError("Please fill out all fields.");
       setLoading(false);
       return;
     }
-
+  
     try {
       // Step 1: Call the first API to create a payment intent
       const paymentIntentResponse = await axios.post(
@@ -49,21 +47,30 @@ const PaymentPage = () => {
           currency: "usd",
         }
       );
-
+  
       const { clientSecret } = paymentIntentResponse.data;
-
-      // Simulate a successful payment confirmation
+  
       console.log("Payment Intent Created:", clientSecret);
-
-      // Step 2: Call the second API to confirm payment success
+  
+      // Step 2: Fetch booking details (if needed)
+      // Replace "64f1b2c3e4b0f5a2d8e7f8a9" with a dynamic booking ID if applicable
+      const bookingId = "64f1b2c3e4b0f5a2d8e7f8a9";
+      const bookingResponse = await axios.get(
+        `https://renderbackend-1-gw0j.onrender.com/api/bookings/${bookingId}`
+      );
+  
+      const bookingDetails = bookingResponse.data;
+  
+      // Step 3: Call the second API to confirm payment success
       const successResponse = await axios.post(
         "https://renderbackend-1-gw0j.onrender.com/api/payment/payment-success",
         {
           paymentIntentId: clientSecret, // Use the client secret as paymentIntentId
-          bookingId: "64f1b2c3e4b0f5a2d8e7f8a9", // Replace with actual booking ID
+          bookingId: bookingId, // Replace with actual booking ID
+          booking: bookingDetails, // Include booking details if required
         }
       );
-
+  
       if (successResponse.status === 200) {
         alert("Payment successful!");
         // Reset form
