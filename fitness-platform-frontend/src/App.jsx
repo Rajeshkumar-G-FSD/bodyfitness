@@ -19,6 +19,7 @@ import Home from "./pages/Home.jsx";
 import CreateTrainerForm from "./components/CreateTrainerForm";
 import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
 import BookingManagementPage from "./pages/BookingManagementPage.jsx";
+import ClassRecommendationsPage from "./pages/payment-success.jsx";
 
 
 import PaymentPage from "./pages/PaymentPage.jsx"; // Import the new page
