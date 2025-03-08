@@ -40,32 +40,26 @@ const PaymentPage = () => {
     }
 
     try {
-      // Step 1: Create a payment intent
+      // Step 1: Call the first API to create a payment intent
       const paymentIntentResponse = await axios.post(
         "https://renderbackend-1-gw0j.onrender.com/api/payment/create-payment-intent",
         {
           amount: parseFloat(amount) * 100, // Convert to cents
           currency: "usd",
-          name,
-          cardNumber,
-          expiry,
-          cvv,
         }
       );
 
       const { clientSecret } = paymentIntentResponse.data;
 
-      // Step 2: Confirm the payment (simulated here)
-      // In a real-world scenario, you would use Stripe's `confirmCardPayment` here.
+      // Simulate a successful payment confirmation
       console.log("Payment Intent Created:", clientSecret);
 
-      // Step 3: Call the success API
+      // Step 2: Call the second API to confirm payment success
       const successResponse = await axios.post(
         "https://renderbackend-1-gw0j.onrender.com/api/payment/payment-success",
         {
-          paymentIntentId: clientSecret, // Use the client secret or payment intent ID
-          amount: parseFloat(amount) * 100,
-          currency: "usd",
+          paymentIntentId: clientSecret, // Use the client secret as paymentIntentId
+          bookingId: "64f1b2c3e4b0f5a2d8e7f8a9", // Replace with actual booking ID
         }
       );
 
