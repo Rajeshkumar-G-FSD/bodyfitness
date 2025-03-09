@@ -20,6 +20,8 @@ import CreateTrainerForm from "./components/CreateTrainerForm";
 import { AuthContext, AuthProvider } from "./context/AuthContext.jsx";
 import BookingManagementPage from "./pages/BookingManagementPage.jsx";
 
+import About from "./pages/About"; // Import the About component
+
 import PaymentSuccess from "./pages/payment-success"; // Import the PaymentSuccess component
 
 
@@ -69,7 +71,7 @@ function App() {
         
           {/* Other routes */}
           <Route path="/payment" element={<PaymentPage />} />
-       
+          <Route path="/about" element={<About />} /> {/* Add the About route */}
           {/* Login Page */}
           <Route path="/login" element={<Login />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
