@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
-import backgroundImage from "../assets/image.jpg";
+import backgroundImage from "../assets/workout.jpg";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
