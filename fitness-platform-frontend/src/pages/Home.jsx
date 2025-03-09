@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.jsx";
-import backgroundImage from "../assets/workout.jpg";
+import { Link } from "react-router-dom"; // Import Link for navigation
+import backgroundImage from "../assets/image.jpg";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
@@ -8,21 +9,31 @@ const Home = () => {
   return (
     <div
       className="min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${backgroundImage})` }} // Use the imported image
+      style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       <div className="container mx-auto p-4">
         {/* Header and Navigation */}
         <h1 className="text-4xl font-bold text-white mb-8">RAPIDERT</h1>
         <nav className="mb-8">
           <ul className="flex space-x-6">
-            <li><a href="/" className="text-white hover:text-gray-200">Home</a></li>
-            <li><a href="/about" className="text-white hover:text-gray-200">About Us</a></li>
+            <li>
+              <Link to="/" className="text-white hover:text-gray-200">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="text-white hover:text-gray-200">
+                About Us
+              </Link>
+            </li>
           </ul>
         </nav>
 
         {/* Motivational Message */}
         <div className="text-center mb-12">
-          <h2 className="text-6xl font-bold text-white mb-4">Every Day Is A Chance To</h2>
+          <h2 className="text-6xl font-bold text-white mb-4">
+            Every Day Is A Chance To
+          </h2>
           <h3 className="text-5xl font-bold text-white">Become Better</h3>
         </div>
 
@@ -35,7 +46,9 @@ const Home = () => {
             <p className="text-gray-700">Preferences: {user.preferences}</p>
           </div>
         ) : (
-          <p className="text-white text-center">Please log in to view your profile.</p>
+          <p className="text-white text-center">
+            Please log in to view your profile.
+          </p>
         )}
       </div>
     </div>
