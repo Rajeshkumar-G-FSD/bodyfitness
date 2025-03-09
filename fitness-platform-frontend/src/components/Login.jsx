@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 
@@ -26,7 +26,6 @@ const Login = () => {
     }
   };
 
-  const userId = localStorage.getItem("userId");
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-indigo-500">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -68,9 +67,9 @@ const Login = () => {
         {/* Register Link */}
         <p className="mt-4 text-center">
           Don't have an account?{" "}
-          <a href="/register" className="text-blue-500 hover:underline">
+          <Link to="/register" className="text-blue-500 hover:underline">
             Register here
-          </a>
+          </Link>
         </p>
       </div>
     </div>
