@@ -24,6 +24,18 @@ const Navbar = () => {
               Home
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                `text-white hover:text-gray-200 transition-colors duration-300 ${
+                  isActive ? "font-bold underline" : ""
+                }`
+              }
+            >
+              About Us
+            </NavLink>
+          </li>
           {user ? (
             <>
               <li>
