@@ -24,45 +24,44 @@ const Navbar = () => {
               Home
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to="/trainers"
-              className={({ isActive }) =>
-                `text-white hover:text-gray-200 transition-colors duration-300 ${
-                  isActive ? "font-bold underline" : ""
-                }`
-              }
-            >
-              Trainers
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/classes"
-              className={({ isActive }) =>
-                `text-white hover:text-gray-200 transition-colors duration-300 ${
-                  isActive ? "font-bold underline" : ""
-                }`
-              }
-            >
-              Classes
-            </NavLink>
-          </li>
-          {/* Add Payment Link */}
-          <li>
-            <NavLink
-              to="/payment"
-              className={({ isActive }) =>
-                `text-white hover:text-gray-200 transition-colors duration-300 ${
-                  isActive ? "font-bold underline" : ""
-                }`
-              }
-            >
-              Payment
-            </NavLink>
-          </li>
           {user ? (
             <>
+              <li>
+                <NavLink
+                  to="/trainers"
+                  className={({ isActive }) =>
+                    `text-white hover:text-gray-200 transition-colors duration-300 ${
+                      isActive ? "font-bold underline" : ""
+                    }`
+                  }
+                >
+                  Trainers
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/classes"
+                  className={({ isActive }) =>
+                    `text-white hover:text-gray-200 transition-colors duration-300 ${
+                      isActive ? "font-bold underline" : ""
+                    }`
+                  }
+                >
+                  Classes
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/payment"
+                  className={({ isActive }) =>
+                    `text-white hover:text-gray-200 transition-colors duration-300 ${
+                      isActive ? "font-bold underline" : ""
+                    }`
+                  }
+                >
+                  Payment
+                </NavLink>
+              </li>
               <li>
                 <NavLink
                   to="/bookings"
